@@ -1,4 +1,6 @@
-# kubectl apply -f https://raw.githubusercontent.com/kubernetes/ingress-nginx/controller-v0.44.0/deploy/static/provider/cloud/deploy.yaml
+#########################
+# for PRODUCTION !!
+#########################
 apiVersion: extensions/v1beta1
 kind: Ingress
 metadata:
@@ -8,6 +10,7 @@ metadata:
     nginx.ingress.kubernetes.io/use-regex: 'true'
 spec:
   rules:
+    # www.ticket-app.work for PRODUCTION host !
     - host: www.ticket-app.work
       http:
         paths:

@@ -14,7 +14,7 @@ spec:
     spec:
       containers:
         - name: payments
-          image: gcr.io/ticket-dev-303913/payments
+          image: avgsteve/ticketing-payments
           env:
             - name: NATS_CLIENT_ID
               valueFrom:
@@ -27,6 +27,8 @@ spec:
             # 連接資料庫
             - name: MONGO_URI
               value: 'mongodb://payments-mongo-srv:27017/payments'
+            # check secrets in current context, use command:
+            # kubectl get secrets  
             - name: JWT_KEY
               valueFrom:
                 secretKeyRef:

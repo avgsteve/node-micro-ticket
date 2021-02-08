@@ -16,7 +16,7 @@ spec:
         - name: client
           # image: avgsteve/ticketing-client:latest
           # image: us.gcr.io/ticket-dev-303913/client        
-          image: gcr.io/ticket-dev-303913/client
+          image: avgsteve/ticketing-client
           # imagePullPolicy: Never
 ---
 # Config for Cluster IP service

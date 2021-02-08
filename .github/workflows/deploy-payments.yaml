@@ -1,25 +1,20 @@
-name: deploy-manifests
+name: deploy-payments
 on: 
   push:
     branches:
       - master
     paths:
-      - 'infra/**'
+      - 'payments/**'
 
 jobs:
   build:
-
     # runs-on: ubuntu-latest
-    # note: there will be wanrning: Ubuntu-latest workflows will use Ubuntu-20.04 soon. For more details, see https://github.com/actions/virtual-environments/issues/1816
-    
     runs-on: ubuntu-20.04
-    # ref: https://docs.github.com/en/actions/reference/workflow-syntax-for-github-actions#jobsjob_idruns-on
-
     steps:
       - uses: actions/checkout@v2
         
       # build image        
-      - run: cd auth && docker build -t avgsteve/ticketing-auth .
+      - run: cd payments && docker build -t avgsteve/ticketing-payments .
         
       # login to docker
       - run: docker login -u $DOCKER_USERNAME -p $DOCKER_PASSWORD
@@ -28,9 +23,9 @@ jobs:
           DOCKER_PASSWORD: ${{ secrets.DOCKER_PASSWORD }}
           
       # push image to docker hub
-      - run: docker push avgsteve/ticketing-auth
+      - run: docker push avgsteve/ticketing-payments
         
-      # use and authenticate doctl  
+      # use and paymentsenticate doctl  
       - uses: digitalocean/action-doctl@v2
         with:
           token: ${{ secrets.DIGITALOCEAN_ACCESS_TOKEN }}
@@ -38,5 +33,6 @@ jobs:
       # give credential to k8s cluster
       - run: doctl kubernetes cluster kubeconfig save ticketing
       
-      # apply deployment yaml files (k8s-prod is for production!)
-      - run: kubectl apply -f infra/k8s && kubectl apply -f infra/k8s-prod
+      # restart deployment
+      - run: kubectl rollout restart deployment payments-depl
+

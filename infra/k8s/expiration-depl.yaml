@@ -14,7 +14,7 @@ spec:
     spec:
       containers:
         - name: expiration
-          image: gcr.io/ticket-dev-303913/expiration
+          image: avgsteve/ticketing-expiration
           env:
             # 連接 NATS service 的 設定
             - name: NATS_CLIENT_ID
