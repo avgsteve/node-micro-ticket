@@ -1,0 +1,10 @@
+
+// https://www.udemy.com/course/microservices-with-node-js-and-react/learn/lecture/19826498#questions/13853028
+
+
+export const stripe = {
+  charges: {
+    // create 一個 Promise 並且 resolve 的結果是一個 {}
+    create: jest.fn().mockResolvedValue({}),
+  },
+};

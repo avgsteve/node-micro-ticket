@@ -1,0 +1,40 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: expiration-redis-depl
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: expiration-redis
+  template:
+    metadata:
+      labels:
+        app: expiration-redis   # for service selector
+    spec:
+      containers:
+        - name: expiration-redis
+          image: redis # redids 實際的 docker image 名稱
+          # imagePullPolicy: Never
+          # ==== 設定環境變數 ====
+          # env:
+          #   - name: JWT_KEY
+          #     valueFrom:
+          #       secretKeyRef:
+          #         name: jwt-secret # 取得透過 kubernetes 建立的 secret 環境變數 "jwt-secret" 物件
+          #         key: JWT_KEY # 取得 jwt-secret 裡面的 key-value pair 的 JWT_KEY 的值 
+
+---
+# Config for REDIS for expiration service
+apiVersion: v1
+kind: Service
+metadata:
+  name: expiration-redis-srv # 可以讓其他 pods 連接的 host name 
+spec:
+  selector:
+    app: expiration-redis  # find the pod with the metadata label of "expiration-redis"
+  ports:
+    - name: db
+      protocol: TCP
+      port: 6379
+      targetPort: 6379

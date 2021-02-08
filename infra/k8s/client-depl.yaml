@@ -1,0 +1,34 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: client-depl
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: client
+  template:
+    metadata:
+      labels:
+        app: client   # for service selector
+    spec:
+      containers:
+        - name: client
+          # image: avgsteve/ticketing-client:latest
+          # image: us.gcr.io/ticket-dev-303913/client        
+          image: gcr.io/ticket-dev-303913/client
+          # imagePullPolicy: Never
+---
+# Config for Cluster IP service
+apiVersion: v1
+kind: Service
+metadata:
+  name: client-srv
+spec:
+  selector:
+    app: client  # find the pod with the metadata label of "auth"
+  ports:
+    - name: client
+      protocol: TCP
+      port: 3000
+      targetPort: 3000

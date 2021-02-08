@@ -1,0 +1,138 @@
+# https://www.udemy.com/course/microservices-with-node-js-and-react/learn/lecture/19102628#questions/13076054
+apiVersion: skaffold/v2beta4
+kind: Config
+build:
+  # tagPolicy:
+  #   sha256: {}
+  # local:
+  #   push: false  
+  # googleCloudBuild:
+  #   projectId: ticket-dev-303913
+  # 須要在 build 底下多一層artifacts 建立每個service的 image
+  artifacts:
+    - image: gcr.io/ticket-dev-303913/auth
+      context: auth
+      sync:
+        infer:
+          - 'src/**/*.ts'
+        # manual:
+        #   - src: "src/**/*.ts"
+        #     dest: .
+    - image: gcr.io/ticket-dev-303913/client
+      context: client
+      sync:
+        infer:
+          - 'src/**/*.js'
+    - image: gcr.io/ticket-dev-303913/tickets
+      context: tickets
+      sync:
+        infer:
+          - 'src/**/*.ts'          
+        # manual:
+        #   - src: "src/**/*.ts"
+        #     dest: .
+    - image: gcr.io/ticket-dev-303913/orders
+      context: orders
+      sync:
+        infer:
+          - 'src/**/*.ts'       
+    - image: gcr.io/ticket-dev-303913/expiration
+      context: expiration
+      sync:
+        infer:
+          - 'src/**/*.ts'          
+    - image: gcr.io/ticket-dev-303913/payments
+      context: payments
+      sync:
+        infer:
+          - 'src/**/*.ts'                     
+
+# 進行發布 的 .yaml 檔案資料夾
+deploy:
+  kubectl:
+    manifests:
+      - ./infra/k8s/*
+      - ./infra/k8s-dev/*
+
+# 發布的設定跟發布內容
+profiles:
+  - name: cloudbuild
+    build:
+      googleCloudBuild: { projectId: ticket-dev-303913 }
+      # projectId: ticket-dev-303913
+      artifacts:
+# Auth service
+        - image: gcr.io/ticket-dev-303913/auth
+          context: auth
+          docker:
+            dockerfile: Dockerfile
+          sync:
+            infer:
+              - 'src/**/*.ts'
+            # manual:
+            #   - src: "src/**/*.ts"
+            #     dest: .
+# Client service
+        - image: gcr.io/ticket-dev-303913/client           
+          context: client
+          docker:
+            dockerfile: Dockerfile
+          sync:
+            infer:
+              - '**/*.js'
+# Tickets service
+        - image: gcr.io/ticket-dev-303913/tickets           
+          context: tickets
+          docker:
+            dockerfile: Dockerfile
+          sync:
+            infer:
+              - '**/*.ts'              
+# Order service
+        - image: gcr.io/ticket-dev-303913/orders           
+          context: orders
+          docker:
+            dockerfile: Dockerfile
+          sync:
+            infer:
+              - '**/*.ts'              
+# Expiration service
+        - image: gcr.io/ticket-dev-303913/expiration           
+          context: expiration
+          docker:
+            dockerfile: Dockerfile
+          sync:
+            infer:
+              - '**/*.ts'        
+# Payment service
+        - image: gcr.io/ticket-dev-303913/payments           
+          context: payments
+          docker:
+            dockerfile: Dockerfile
+          sync:
+            infer:
+              - '**/*.ts'                         
+
+# ===== Backup Config ===
+
+# apiVersion: skaffold/v2alpha3
+# kind: Config
+# deploy:
+#   kubectl:
+#     manifests:
+#       - ./infra/k8s/*
+# build:
+#   # local:
+#   #   push: false
+#   googleCloudBuild:
+#     projectId: ticket-dev-303913
+#   artifacts:
+#     #- image: avgsteve/ticketing-auth
+#     - image: gcr.io/ticket-dev-303913/auth
+#       context: auth
+#       docker:
+#         dockerfile: Dockerfile
+#       sync:
+#         manual:
+#           - src: 'src/**/*.ts'
+#             dest: .

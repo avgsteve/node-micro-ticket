@@ -1,0 +1,23 @@
+{
+  "name": "nats-test",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "publish2": "ts-node-dev --rs --notify false src/publisher.ts",
+    "publish": "nodemon src/publisher.ts",
+    "listen2": "ts-node-dev --rs --notify false src/listener.ts",
+    "listen": "nodemon src/listener.ts"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "dependencies": {
+    "@types/node": "^13.11.1",
+    "node-nats-streaming": "^0.2.6",
+    "ts-node-dev": "^1.0.0-pre.44",
+    "nodemon": "^2.0.7",
+    "typescript": "^3.8.3"
+    
+  }
+}

@@ -1,0 +1,52 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: orders-depl
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: orders
+  template:
+    metadata:
+      labels:
+        app: orders   # for service selector
+    spec:
+      containers:
+        - name: orders
+          # image: avgsteve/ticketing-orders:latest
+          # image: us.gcr.io/ticket-dev-303913/orders        
+          image: gcr.io/ticket-dev-303913/orders
+          # imagePullPolicy: Never
+          # ==== 設定環境變數 ====
+          env:
+            - name: JWT_KEY
+              valueFrom:
+                secretKeyRef:
+                  name: jwt-secret # 取得透過 kubernetes 建立的 secret 環境變數 "jwt-secret" 物件
+                  key: JWT_KEY # 取得 jwt-secret 裡面的 key-value pair 的 JWT_KEY 的值 
+            - name: MONGO_URI
+              value: 'mongodb://orders-mongo-srv:27017/orders'
+            - name: NATS_URL
+              value: 'http://nats-srv:4222'            
+            - name: NATS_CLUSTER_ID
+              value: ticketing                  
+            - name: NATS_CLIENT_ID
+              valueFrom:
+                fieldRef:
+                  fieldPath: metadata.name # 使用 pod 的名稱作為 NATS_CLIENT_ID
+
+---
+# Config for service
+apiVersion: v1
+kind: Service
+metadata:
+  name: orders-srv
+spec:
+  selector:
+    app: orders  # find the pod with the metadata label of "orders"
+  ports:
+    - name: orders
+      protocol: TCP
+      port: 3000
+      targetPort: 3000

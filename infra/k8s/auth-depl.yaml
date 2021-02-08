@@ -1,0 +1,45 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: auth-depl
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: auth
+  template:
+    metadata:
+      labels:
+        app: auth   # for service selector
+    spec:
+      containers:
+        - name: auth
+          # image: avgsteve/ticketing-auth:latest
+          # image: us.gcr.io/ticket-dev-303913/auth        
+          image: gcr.io/ticket-dev-303913/auth
+          # imagePullPolicy: Never
+          # ==== 設定環境變數 ====
+          env:
+            - name: JWT_KEY
+              valueFrom:
+                secretKeyRef:
+                  name: jwt-secret # 取得透過 kubernetes 建立的 secret 環境變數 "jwt-secret" 物件
+                  key: JWT_KEY # 取得 jwt-secret 裡面的 key-value pair 的 JWT_KEY 的值 
+            - name: MONGO_URI
+              value: 'mongodb://tickets-mongo-srv:27017/tickets'            
+
+
+---
+# Config for service
+apiVersion: v1
+kind: Service
+metadata:
+  name: auth-srv
+spec:
+  selector:
+    app: auth  # find the pod with the metadata label of "auth"
+  ports:
+    - name: auth
+      protocol: TCP
+      port: 3000
+      targetPort: 3000

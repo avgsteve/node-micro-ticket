@@ -1,0 +1,69 @@
+import { MongoMemoryServer } from 'mongodb-memory-server';
+import mongoose from 'mongoose';
+import request from 'supertest';
+import { app } from '../app';
+import jwt from 'jsonwebtoken';
+
+declare global {
+  namespace NodeJS {
+    interface Global {
+      signin(): string[]; // 傳出作為session cookie的內容
+    }
+  }
+}
+
+// 讓 NATS Client 可以被引入測試的流程中
+jest.mock('../nats-wrapper.ts');
+
+let mongo: any;
+beforeAll(async () => {
+  process.env.JWT_KEY = 'asdfasdf';
+  process.env.NODE_TLS_REJECT_UNAUTHORIZED = '0';
+
+  mongo = new MongoMemoryServer();
+  const mongoUri = await mongo.getUri();
+
+  await mongoose.connect(mongoUri, {
+    useNewUrlParser: true,
+    useUnifiedTopology: true,
+  });
+});
+
+// 測試開始之前的設置環境
+beforeEach(async () => {
+  jest.clearAllMocks();
+  const collections = await mongoose.connection.db.collections();
+
+  for (let collection of collections) {
+    await collection.deleteMany({});
+  }
+});
+
+afterAll(async () => {
+  await mongo.stop();
+  await mongoose.connection.close();
+});
+
+global.signin = () => {
+  // 透過自訂 Cookie 建立一個假的使用者身分
+  // Build a JWT payload.  { id, email }
+  const payload = {
+    id: new mongoose.Types.ObjectId().toHexString(),
+    email: 'test@test.com',
+  };
+
+  // Create the JWT! (process.env.JWT_KEY 在 beforeAll中事先建立)
+  const token = jwt.sign(payload, process.env.JWT_KEY!);
+
+  // Build session Object. { jwt: MY_JWT }
+  const session = { jwt: token };
+
+  // Turn that session into JSON
+  const sessionJSON = JSON.stringify(session);
+
+  // Take JSON and encode it as base64
+  const base64 = Buffer.from(sessionJSON).toString('base64');
+
+  // return a string thats the cookie with the encoded data
+  return [`express:sess=${base64}`];
+};

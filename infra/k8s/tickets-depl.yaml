@@ -1,0 +1,52 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: tickets-depl
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: tickets
+  template:
+    metadata:
+      labels:
+        app: tickets   # for service selector
+    spec:
+      containers:
+        - name: tickets
+          # image: avgsteve/ticketing-tickets:latest
+          # image: us.gcr.io/ticket-dev-303913/tickets        
+          image: gcr.io/ticket-dev-303913/tickets
+          # imagePullPolicy: Never
+          # ==== 設定環境變數 ====
+          env:
+            - name: JWT_KEY
+              valueFrom:
+                secretKeyRef:
+                  name: jwt-secret # 取得透過 kubernetes 建立的 secret 環境變數 "jwt-secret" 物件
+                  key: JWT_KEY # 取得 jwt-secret 裡面的 key-value pair 的 JWT_KEY 的值 
+            - name: MONGO_URI
+              value: 'mongodb://tickets-mongo-srv:27017/tickets'
+            - name: NATS_URL
+              value: 'http://nats-srv:4222'            
+            - name: NATS_CLUSTER_ID
+              value: ticketing                  
+            - name: NATS_CLIENT_ID
+              valueFrom:
+                fieldRef:
+                  fieldPath: metadata.name # 使用 pod 的名稱作為 NATS_CLIENT_ID
+
+---
+# Config for service
+apiVersion: v1
+kind: Service
+metadata:
+  name: tickets-srv
+spec:
+  selector:
+    app: tickets  # find the pod with the metadata label of "tickets"
+  ports:
+    - name: tickets
+      protocol: TCP
+      port: 3000
+      targetPort: 3000

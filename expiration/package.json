@@ -1,0 +1,37 @@
+{
+  "name": "expiration",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "start": "npm run log_package_version &&  nodemon src/index.ts",
+    "start2": "ts-node-dev src/index.ts",
+    "test": "jest --watchAll --no-cache",
+    "up": "npm update @ticket-microservice2021/common && npm run log_package_version",
+    "log_package_version": "node logPackageVersion.js"
+  },
+  "jest": {
+    "preset": "ts-jest",
+    "testEnvironment": "node",
+    "setupFilesAfterEnv": [
+      "./src/test/setup.ts"
+    ]
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "dependencies": {
+    "@ticket-microservice2021/common": "^1.0.32",
+    "@types/bull": "^3.12.2",
+    "bull": "^3.13.0",
+    "node-nats-streaming": "^0.2.6",
+    "nodemon": "^2.0.7",
+    "ts-node-dev": "^1.0.0-pre.44",
+    "typescript": "^3.8.3"
+  },
+  "devDependencies": {
+    "@types/jest": "^25.2.1",
+    "jest": "^25.2.7",
+    "ts-jest": "^25.3.1"
+  }
+}

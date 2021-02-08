@@ -1,0 +1,46 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: expiration-depl
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: expiration
+  template:
+    metadata:
+      labels:
+        app: expiration
+    spec:
+      containers:
+        - name: expiration
+          image: gcr.io/ticket-dev-303913/expiration
+          env:
+            # 連接 NATS service 的 設定
+            - name: NATS_CLIENT_ID
+              valueFrom:
+                fieldRef:
+                  fieldPath: metadata.name
+            - name: NATS_URL
+              value: 'http://nats-srv:4222'
+            - name: NATS_CLUSTER_ID
+              value: ticketing
+            # 連接到 REDIS service 的設定              
+            - name: REDIS_HOST
+              value: expiration-redis-srv # redis的服務名稱 service name (from expiration-redis-depl.yaml -> kind: Service -> metadata -> name:)
+              
+# ---
+# 因為這個服務不會與其他PODS直接連接，而是透過REDIS，所以expiration不用啟用服務
+
+# apiVersion: v1
+# kind: Service
+# metadata:
+#   name: expiration-srv # 可以讓其他 pods 連接的 host name 
+# spec:
+#   selector:
+#     app: expiration  # find the pod with the metadata label of "expiration-redis"
+#   ports:
+#     - name: expiration
+#       protocol: TCP
+#       port: 3000
+#       targetPort: 3000

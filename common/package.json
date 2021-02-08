@@ -1,0 +1,41 @@
+{
+  "name": "@ticket-microservice2021/common",
+  "version": "1.0.35",
+  "description": "",
+  "main": "./build/index.js",
+  "types": "./build/index.d.ts",
+  "files": [
+    "build/**/*"
+  ],
+  "scripts": {
+    "log": "node writeLog.js",
+    "clean": "del-cli ./build/*",
+    "build": "npm run clean && tsc",
+    "pub": "npm run build && npm run log && git add . && git commit -m \"Updates\" && npm version patch && npm publish"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "devDependencies": {
+    "del-cli": "^3.0.0",
+    "typescript": "^3.8.3"
+  },
+  "dependencies": {
+    "@types/cookie-session": "^2.0.39",
+    "@types/express": "^4.17.5",
+    "@types/jsonwebtoken": "^8.3.9",
+    "cookie-session": "^1.4.0",
+    "express": "^4.17.1",
+    "express-validator": "^6.4.0",
+    "jsonwebtoken": "^8.5.1",
+    "node-nats-streaming": "^0.3.2"
+  },
+  "comments": {
+    "comments": "=== 註解這份npm package.json的內容 ===",
+    "files": " 設定要透過 npm 發布檔案的資料夾 ",
+    "commands": "=== 常用npm 指令 ===",
+    "# npm version patch": "更新package.json的版本號 (要先commit所有變動，保存當下的版本號跟檔案之後，才能執行下一步的更新和再依照內容的變動更新版本號碼)",
+    "# npm publish --access public": "第一次發布公開package的時候要執行的指令，後面用npm publish就可以了",
+    "# npm run pub": "綜合git commit, 更新版本號以及重新 build檔案三種不同操作的指令"
+  }
+}

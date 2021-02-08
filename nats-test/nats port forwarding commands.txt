@@ -1,0 +1,17 @@
+1) k get pods
+
+ex:  nats-depl-d6f559f6c-bhgq5
+
+2) 
+k port-forward nats-depl-d6f559f6c-bhgq5 4222:4222
+k port-forward nats-depl-d6f559f6c-bhgq5 8222:8222
+
+
+(第二個port: 4222 => NATS server連接的port)
+
+  成功後顯示:
+  Forwarding from 127.0.0.1:4222 -> 4222
+  Forwarding from [::1]:4222 -> 4222
+
+3)  npm run publish
+    (執行 ts-node-dev --rs --notify false src/publisher.ts )
