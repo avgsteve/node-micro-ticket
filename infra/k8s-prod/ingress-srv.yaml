@@ -10,7 +10,12 @@ metadata:
     nginx.ingress.kubernetes.io/use-regex: 'true'
 spec:
   rules:
+<<<<<<< Updated upstream
     - host: ticketing.com  # for PRODUCTION !
+=======
+    # www.ticket-app.work for PRODUCTION host !
+    - host: www.ticket-app.work
+>>>>>>> Stashed changes
       http:
         paths:
           - path: /api/users/?(.*)
