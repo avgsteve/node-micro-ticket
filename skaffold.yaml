@@ -1,10 +1,10 @@
-# https://www.udemy.com/course/microservices-with-node-js-and-react/learn/lecture/19102628#questions/13076054
 apiVersion: skaffold/v2beta4
 kind: Config
 deploy:
   kubectl:
     manifests:
       - ./infra/k8s/*
+      - ./infra/k8s-dev/* # for development
 build:
   local:
     push: false
