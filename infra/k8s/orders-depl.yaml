@@ -16,7 +16,7 @@ spec:
         - name: orders
           # image: avgsteve/ticketing-orders:latest
           # image: us.gcr.io/ticket-dev-303913/orders        
-          image: gcr.io/ticket-dev-303913/orders
+          image: avgsteve/ticketing-orders
           # imagePullPolicy: Never
           # ==== 設定環境變數 ====
           env:

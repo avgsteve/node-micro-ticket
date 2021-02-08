@@ -16,7 +16,7 @@ spec:
         - name: auth
           # image: avgsteve/ticketing-auth:latest
           # image: us.gcr.io/ticket-dev-303913/auth        
-          image: gcr.io/ticket-dev-303913/auth
+          image: avgsteve/ticketing-auth
           # imagePullPolicy: Never
           # ==== 設定環境變數 ====
           env:

@@ -8,7 +8,10 @@ on:
 
 jobs:
   build:
-    runs-on: ubuntu-latest
+    # runs-on: ubuntu-latest
+    runs-on: ubuntu-20.04
+    # ref: https://docs.github.com/en/actions/reference/workflow-syntax-for-github-actions#jobsjob_idruns-on
+
     steps:
       - uses: actions/checkout@v2
         
