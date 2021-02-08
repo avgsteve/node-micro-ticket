@@ -2,8 +2,8 @@
 
 import Link from 'next/link';
 const LandingPage = ({ currentUser, ticketsData }) => {
-  console.log('currentUser in index.js: \n', currentUser);
-  console.log('ticketsData in index.js: \n', ticketsData);
+  console.log('currentUser in index.js : \n', currentUser);
+  console.log('ticketsData in index.js : \n', ticketsData);
 
   const ticketList = ticketsData.map(ticket => {
     return (

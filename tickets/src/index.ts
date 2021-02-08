@@ -16,7 +16,7 @@ import { OrderCancelledListener } from "./events/listeners/[tickets] order-cance
 
 const start = async () => {
 
-  console.log('test for tickets service..');
+  console.log('test for tickets service...');
 
   // 
   if (!process.env.JWT_KEY) {
