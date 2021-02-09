@@ -8,7 +8,7 @@ import { app } from './app';
 
 const startServiceAndDB = async () => {
 
-  console.log('starting ticket service and dabase now...');
+  console.log('starting ticket service and dabase now$query = "SELECT * FROM ";.');
 
   // for JWT token
   if (!process.env.JWT_KEY) {
