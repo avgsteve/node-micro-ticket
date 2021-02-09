@@ -8,7 +8,11 @@ import { app } from './app';
 
 const startServiceAndDB = async () => {
 
+<<<<<<< HEAD
   console.log('starting ticket service and dabase now$query = "SELECT * FROM ";.');
+=======
+  console.log('starting ticket service and dabase now..');
+>>>>>>> parent of 1c3f88e... Merge pull request #3 from avgsteve/dev
 
   // for JWT token
   if (!process.env.JWT_KEY) {
