@@ -16,7 +16,7 @@ import { PaymentCreatedEventListener } from "./events/listener/[orders] payment-
 
 const start = async () => {
 
-  console.log('test for orders service..');
+  console.log('test for orders service...');
 
   // 
   if (!process.env.JWT_KEY) {

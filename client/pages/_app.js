@@ -11,7 +11,7 @@ const AppComponent = ({
   pageProps,
   currentUser,
 }) => {
-  console.log("Component in _app.js: ", Component);
+  console.log("Component  in _app.js: ", Component);
   // LandingPage(_ref)
 
   console.log("pageProps in _app.js: ", pageProps);
