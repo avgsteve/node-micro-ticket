@@ -28,7 +28,7 @@ jobs:
       # use and paymentsenticate doctl  
       - uses: digitalocean/action-doctl@v2
         with:
-          token: ${{ secrets.DIGITALOCEAN_ACCESS_TOKEN }}
+          token: ${{ secrets.DO_ACCESS_TOKEN }}
       
       # give credential to k8s cluster
       - run: doctl kubernetes cluster kubeconfig save ticketing
